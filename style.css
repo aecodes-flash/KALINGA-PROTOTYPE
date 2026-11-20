@@ -1,0 +1,1128 @@
+/* ==========================================================================
+   KALINGA – San Roque Elementary School Guidance
+   Table of contents
+     1. Design tokens
+     2. Reset & base
+     3. Page shell (header, main, footer)
+     4. Layout helpers (grid columns, rows, stacks)
+     5. Forms & buttons
+     6. Cards, lists & notes
+     7. Tags, badges & links
+     8. Navigation tabs
+     9. Data display (gauge, bars, QR)
+    10. Chat & SMS bubbles
+    11. Pupil helpdesk banner & code
+    12. Modal dialog & toast
+    13. Responsive
+    14. Print
+   ========================================================================== */
+
+
+/* 1. Design tokens
+   -------------------------------------------------------------------------- */
+:root {
+  /* Core palette */
+  --bg: #f8fafc;
+  --panel: #fff;
+  --ink: #0f172a;
+  --mute: #64748b;
+  --line: #e2e8f0;
+
+  --primary: #1e3a8a;
+  --primary-hover: #1e293b;
+  --primary-light: #eff6ff;
+
+  --accent: #d97706;
+  --accent-light: #fffbeb;
+
+  --danger: #dc2626;
+  --danger-light: #fef2f2;
+
+  --warning: #b45309;
+  --warning-light: #fef3c7;
+
+  --success: #16a34a;
+  --success-light: #f0fdf4;
+
+  /* Surfaces */
+  --head-bg: #0f172a;
+  --chat-student: #1e40af;
+  --chat-staff: #f1f5f9;
+
+  /* Legacy aliases (kept so older rules and scripts keep working) */
+  --paper: var(--bg);
+  --glass: var(--primary-light);
+  --sea: var(--primary);
+  --sea2: var(--primary);
+  --jeep: var(--accent);
+  --brick: var(--danger);
+  --ok: var(--success);
+
+  color-scheme: light;
+  box-sizing: border-box;
+}
+
+
+/* 2. Reset & base
+   -------------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: 130px;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.5 "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Public Sans", system-ui, sans-serif;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+h2 {
+  font-size: 22px;
+  letter-spacing: -.01em;
+  margin-bottom: 2px;
+}
+
+h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+pre {
+  white-space: pre-wrap;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  font: 12.5px/1.5 ui-monospace, monospace;
+  max-height: 200px;
+  overflow: auto;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.lede {
+  color: var(--mute);
+  margin: 0 0 20px;
+  max-width: 66ch;
+}
+
+.mute {
+  color: var(--mute);
+  font-size: 13.5px;
+}
+
+.empty {
+  color: var(--mute);
+  font-style: italic;
+  padding: 8px 0;
+}
+
+.err {
+  color: var(--danger);
+  font-weight: 600;
+  margin: 8px 0 0;
+  min-height: 1em;
+  font-size: 13.5px;
+}
+
+
+/* 3. Page shell
+   -------------------------------------------------------------------------- */
+/* Header and navigation bar stay fixed at the top for every role */
+.chrome {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  padding-top: env(safe-area-inset-top, 0px);
+  background: var(--head-bg);
+}
+
+header {
+  background: #0f172a;
+  color: #fff;
+  padding: 10px max(20px, env(safe-area-inset-left, 0px));
+  border-bottom: 3px solid var(--accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+}
+
+main {
+  padding: 24px max(20px, env(safe-area-inset-left, 0px)) 48px;
+}
+
+footer {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 max(20px, env(safe-area-inset-left, 0px)) 32px;
+  color: var(--mute);
+  font-size: 12.5px;
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 700 22px/1.3 "Public Sans";
+  letter-spacing: .04em;
+  color: #fff;
+}
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  padding: 3px;
+  background: #fff;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.chipn {
+  background: #d97706;
+  color: #fff;
+  font: 600 12px Inter;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: .04em;
+}
+
+.school {
+  margin: 0;
+  font-size: 12px;
+  color: #cbd5e1;
+  max-width: 760px;
+  line-height: 1.35;
+}
+
+/* User name + log out / reset buttons in the header */
+.who {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-weight: 600;
+  font-size: 13.5px;
+  flex-wrap: wrap;
+}
+
+.who button {
+  font: inherit;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, .25);
+  background: rgba(255, 255, 255, .08);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.who button:hover {
+  background: rgba(255, 255, 255, .2);
+  border-color: #fff;
+}
+
+
+/* 4. Layout helpers
+   -------------------------------------------------------------------------- */
+.cols {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+.row2 {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.row2 > * {
+  flex: 1 1 140px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+/* 5. Forms & buttons
+   -------------------------------------------------------------------------- */
+button,
+select,
+input,
+textarea {
+  font: inherit;
+  color: var(--ink);
+}
+
+input,
+select,
+textarea {
+  display: block;
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  min-height: 42px;
+  margin-top: 5px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  background: var(--panel);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, .1);
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 13.5px;
+  margin-top: 14px;
+}
+
+/* Buttons */
+.btn {
+  cursor: pointer;
+  background: var(--primary);
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 18px;
+  min-height: 42px;
+  font-weight: 600;
+  margin-top: 12px;
+  box-shadow: 0 1px 3px rgba(30, 58, 138, .12);
+}
+
+.btn:hover {
+  background: var(--primary-hover);
+}
+
+.btn:disabled {
+  opacity: .6;
+}
+
+/* Yellow / accent variant */
+.btn.y {
+  background: var(--accent-light);
+  color: var(--warning);
+  border: 1px solid #fcd9a4;
+}
+
+.btn.y:hover {
+  background: var(--warning-light);
+}
+
+/* Outline variant */
+.btn.o {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  box-shadow: none;
+}
+
+.btn.o:hover {
+  background: var(--primary-light);
+}
+
+/* Small variant */
+.btn.s {
+  min-height: 34px;
+  padding: 5px 12px;
+  margin: 0;
+  font-size: 13px;
+}
+
+/* Button spacing inside cards (must stay after the variants above) */
+.btn + .btn {
+  margin-left: 0;
+}
+
+.blk form > .btn,
+.blk > .btn {
+  margin-top: 16px;
+}
+
+.blk > .btn.s {
+  margin-top: 0;
+}
+
+
+/* 6. Cards, lists & notes
+   -------------------------------------------------------------------------- */
+.blk {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .03);
+  min-width: 0;
+}
+
+.blk.y {
+  border-left: 4px solid var(--accent);
+}
+
+.blk.r {
+  border-left: 4px solid var(--danger);
+}
+
+.blk > h3:first-child,
+.blk > .item:first-child > div > h3:first-child {
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.blk > h3:first-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.blk > .mute + form,
+.blk > h3 + .mute {
+  margin-top: 0;
+}
+
+/* List rows */
+.item {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.item:last-child {
+  border-bottom: 0;
+}
+
+.item.sel {
+  background: var(--primary-light);
+  margin: 0 -10px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.item > div:first-child {
+  min-width: 0;
+  flex: 1 1 200px;
+}
+
+.item > :not(:first-child) {
+  flex: 0 0 auto;
+}
+
+.item .row2 {
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+}
+
+.item .row2 > * {
+  flex: 0 0 auto;
+}
+
+/* Callout note */
+.note {
+  border-left: 3px solid var(--accent);
+  background: var(--bg);
+  padding: 8px 12px;
+  margin: 8px 0;
+  border-radius: 0 8px 8px 0;
+}
+
+
+/* 7. Tags, badges & links
+   -------------------------------------------------------------------------- */
+.tag {
+  display: inline-flex;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.tag.New,
+.tag.bad {
+  background: var(--danger-light);
+  color: var(--danger);
+  border-color: rgba(220, 38, 38, .15);
+}
+
+.tag.Ongoing,
+.tag.warn {
+  background: var(--warning-light);
+  color: var(--warning);
+  border-color: rgba(180, 83, 9, .2);
+}
+
+.tag.Closed,
+.tag.good {
+  background: var(--success-light);
+  color: var(--success);
+  border-color: rgba(22, 163, 74, .2);
+}
+
+.badge {
+  background: var(--danger);
+  color: #fff;
+  border-radius: 10px;
+  padding: 0 7px;
+  font-size: 12px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Channel label (SMS / Email) */
+.ch {
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 1px 6px;
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Button that looks like a text link */
+.lk {
+  all: unset;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.who .lk {
+  color: #fff;
+}
+
+/* Toggle pills (mood, concern, auth switch) */
+.pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.pills button {
+  cursor: pointer;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.pills button:hover {
+  border-color: var(--primary);
+}
+
+.pills button[aria-pressed=true] {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 700;
+}
+
+
+/* 8. Navigation tabs
+   -------------------------------------------------------------------------- */
+.navbar {
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  padding: 0 max(20px, env(safe-area-inset-left, 0px));
+}
+
+.navbar[hidden] {
+  display: none;
+}
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding: 10px 0;
+}
+
+.tabs button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .02);
+}
+
+.tabs button:hover {
+  border-color: var(--mute);
+}
+
+.tabs button[aria-current=page] {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 2px 4px rgba(30, 58, 138, .15);
+}
+
+
+/* 9. Data display (gauge, bars, QR)
+   -------------------------------------------------------------------------- */
+/* Caseload tank gauge */
+.gauge {
+  display: flex;
+  gap: 18px;
+  align-items: flex-end;
+}
+
+.tank {
+  position: relative;
+  width: 74px;
+  height: 210px;
+  border: 2px solid var(--primary);
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+  background: repeating-linear-gradient(to top, transparent 0 33px, var(--line) 33px 34px);
+}
+
+.tank .w {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--primary);
+  opacity: .85;
+  transition: height .6s;
+}
+
+.tank .u {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--danger);
+  transition: height .6s;
+}
+
+.legend p {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.legend b {
+  font: 700 26px "Public Sans";
+  display: block;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+/* Stacked monthly chart and its legend */
+.chart-svg {
+  width: 100%;
+  max-width: 560px;
+  display: block;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 10px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.chart-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chart-legend i,
+.swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+}
+
+/* Horizontal bar chart rows */
+.bar {
+  display: grid;
+  grid-template-columns: 150px 1fr 28px;
+  gap: 8px;
+  align-items: center;
+  margin: 6px 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.bar i {
+  display: block;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--primary);
+}
+
+.bar i.g {
+  background: var(--success);
+}
+
+.bar b {
+  text-align: right;
+}
+
+/* QR poster */
+.qr {
+  background: #fff;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  width: 240px;
+  max-width: 100%;
+}
+
+.qr svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+/* 10. Chat & SMS bubbles
+   -------------------------------------------------------------------------- */
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: min(340px, 52vh);
+  overflow-y: auto;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.m {
+  max-width: 82%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  word-wrap: break-word;
+  font-size: 14px;
+}
+
+.m.me {
+  align-self: flex-end;
+  background: var(--chat-student);
+  color: #fff;
+  border-bottom-right-radius: 2px;
+}
+
+.m.them {
+  align-self: flex-start;
+  background: var(--chat-staff);
+  border: 1px solid var(--line);
+  border-bottom-left-radius: 2px;
+}
+
+.m small {
+  display: block;
+  font-size: 11px;
+  opacity: .8;
+  margin-top: 4px;
+}
+
+.send {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.send .btn {
+  margin-top: 5px;
+}
+
+.sms {
+  background: var(--primary-light);
+  border: 1px solid rgba(30, 58, 138, .1);
+  border-radius: 10px 10px 10px 2px;
+  padding: 10px 12px;
+  margin: 8px 0;
+  max-width: 52ch;
+}
+
+
+/* 11. Pupil helpdesk banner & code
+   -------------------------------------------------------------------------- */
+.pup {
+  background: var(--warning-light);
+  color: var(--warning);
+  border: 1px solid rgba(180, 83, 9, .2);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.pup h2,
+.pup .lede {
+  color: var(--warning);
+}
+
+.pup-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.info-btn {
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--warning);
+  color: #fff;
+  font: 800 24px "Public Sans", sans-serif;
+  cursor: pointer;
+  box-shadow: 0 0 0 2px var(--warning), 0 2px 5px rgba(15, 23, 42, .2);
+}
+
+.info-btn:hover {
+  background: #92400e;
+}
+
+.help-steps {
+  padding-left: 22px;
+}
+
+.help-steps li {
+  margin: 8px 0;
+}
+
+.code {
+  font: 700 26px "Public Sans";
+  letter-spacing: .04em;
+  background: var(--accent-light);
+  color: var(--warning);
+  border: 1px solid #fcd9a4;
+  padding: 6px 14px;
+  display: inline-block;
+  border-radius: 8px;
+}
+
+
+/* 12. Modal dialog & toast
+   -------------------------------------------------------------------------- */
+.ov {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, .6);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 50;
+}
+
+.dlg {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  max-width: 480px;
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+  max-height: 92vh;
+  overflow: auto;
+}
+
+.dlg.wide {
+  max-width: 860px;
+}
+
+.tbl-form {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0 14px;
+  font-size: 13.5px;
+}
+
+.tbl-form th,
+.tbl-form td {
+  border: 1px solid var(--line);
+  padding: 8px 10px;
+  vertical-align: top;
+  text-align: left;
+}
+
+.tbl-form th {
+  background: var(--bg);
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+
+.tbl-form input,
+.tbl-form textarea,
+.tbl-form select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 13px;
+  margin: 0;
+  background: #fff;
+}
+
+.tbl-form textarea {
+  min-height: 48px;
+  resize: vertical;
+}
+
+.form-item-card {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.form-item-card:last-child {
+  border-bottom: 0;
+}
+
+.form-item-left {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.form-item-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.form-field-group h4 {
+  margin: 16px 0 8px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--primary);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 5px;
+}
+
+.form-radio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+  margin: 6px 0 12px;
+}
+
+.form-radio-grid label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  background: var(--bg);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+}
+
+.form-radio-grid label:hover {
+  border-color: var(--primary);
+}
+
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13.5px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+  z-index: 99;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+}
+
+#toast.on {
+  opacity: 1;
+}
+
+
+/* 13. Responsive
+   -------------------------------------------------------------------------- */
+@media (min-width: 900px) {
+  .cols.a {
+    grid-template-columns: minmax(290px, 350px) 1fr;
+  }
+
+  .cols.b {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 899px) {
+  .cols > .fm {
+    order: -1;
+  }
+}
+
+@media (max-width: 640px) {
+  header {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .school {
+    display: none;
+  }
+
+  main {
+    padding-top: 16px;
+  }
+
+  .item .row2 {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .item .row2 > * {
+    flex: 1 1 auto;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .row2 > .btn,
+  .item .btn,
+  .tabs .btn {
+    width: auto;
+  }
+
+  .dlg {
+    padding: 16px;
+  }
+
+  .tank {
+    height: 170px;
+  }
+
+  .bar {
+    grid-template-columns: 110px 1fr 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+
+/* 14. Print
+   -------------------------------------------------------------------------- */
+@media print {
+  .chrome,
+  footer,
+  #toast,
+  .btn,
+  .who {
+    display: none !important;
+  }
+
+  body.pq main {
+    display: none !important;
+  }
+
+  .ov {
+    position: static;
+    background: none;
+    backdrop-filter: none;
+    padding: 0;
+  }
+
+  .dlg {
+    border: 0;
+    box-shadow: none;
+    max-width: none;
+  }
+}
